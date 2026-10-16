@@ -10,7 +10,7 @@ import { WaIconConfirm } from "./WaIcon";
 import { rp, waLink } from "@/lib/format";
 import { TX, type Tx } from "@/lib/store";
 
-const QRIS_IMG = "/images/bb6d95e9-ff4c-497f-8fca-d26df0eaa737.png";
+const QRIS_IMG = "/images/qris-ludexa.jpg";
 
 type Bill = { amt: number; last4: string };
 type Msg = { cls: string; text: string };
@@ -260,7 +260,7 @@ export function Checkout({ fixedId }: { fixedId?: string }) {
         />
         <a
           href={QRIS_IMG}
-          download="QRIS-Ludexa.png"
+          download="QRIS-Ludexa.jpg"
           target="_blank"
           rel="noopener"
           className="inline-block mt-3 text-sm font-bold text-[#e0337a]"
