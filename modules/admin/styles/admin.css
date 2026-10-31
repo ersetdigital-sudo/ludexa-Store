@@ -1673,3 +1673,9 @@ body:has(.admin-root) > .site-promo {
 .admin-root .adm-nav-label {
   color: #9a7e8c;
 }
+
+/* Jangan buat scroll container di html/body: sticky sidebar butuh viewport. */
+html:has(.admin-root),
+body:has(.admin-root) {
+  overflow-x: clip;
+}
