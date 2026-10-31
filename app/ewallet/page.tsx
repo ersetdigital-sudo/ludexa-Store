@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Checkout } from "@/components/Checkout";
+import { CheckoutSection } from "@/components/CheckoutSection";
 
 export const metadata: Metadata = {
   title: "E-Wallet",
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Checkout fixedId="wallet" />;
+  return <CheckoutSection fixedId="ewallet" />;
 }

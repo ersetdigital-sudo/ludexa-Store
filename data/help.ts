@@ -15,7 +15,7 @@ export const HELP_TOPICS: HelpTopic[] = [
     "tx",
     "Transaksi",
     [
-      ["Bagaimana cara cek status transaksi?", "Buka menu Cek Transaksi, lalu masukkan kode referensi (REF-LDX…) atau nomor tujuan."],
+      ["Bagaimana cara cek status transaksi?", "Buka menu Cek Transaksi, lalu masukkan kode referensi (LDS-261031-XXXXXX) atau nomor tujuan."],
       ["Berapa lama transaksi diproses?", "Transaksi diproses setelah pembayaran terverifikasi. Hubungi CS jika status belum berubah."],
       ["Saya salah memasukkan nomor tujuan, bagaimana?", "Segera hubungi CS via WhatsApp dengan menyertakan kode referensi. Transaksi yang sudah terkirim ke nomor yang salah tidak selalu dapat dibatalkan."],
     ],

@@ -2,14 +2,24 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { CS_WA } from "@/lib/format";
 
-const PAYMENTS = ["QRIS", "DANA", "OVO", "GoPay", "VA Bank"];
+const PAYMENTS = ["QRIS"];
 
-export function Footer() {
+export function Footer({
+  brandName = "Ludexa Store",
+  logoUrl = null,
+  waCs = null,
+}: {
+  brandName?: string;
+  logoUrl?: string | null;
+  waCs?: string | null;
+}) {
+  const waNumber = (waCs ?? CS_WA).replace(/\D/g, "");
+
   return (
     <footer className="bg-[#2a1526] text-white/65 text-sm">
       <div className="max-w-6xl mx-auto px-5 pt-14 pb-8 grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <Logo dark />
+          <Logo dark name={brandName} logoUrl={logoUrl} />
           <p className="mt-4 max-w-xs">
             Platform pembayaran digital untuk pulsa, data, token listrik, dan tagihan bulanan.
             Cepat, aman, harga bersahabat.
@@ -30,7 +40,7 @@ export function Footer() {
             <li><Link href="/cek">Cek Transaksi</Link></li>
             <li><Link href="/bantuan">Pusat Bantuan</Link></li>
             <li>
-              <a href={`https://wa.me/${CS_WA}`} target="_blank" rel="noopener">
+              <a href={`https://wa.me/${waNumber}`} target="_blank" rel="noopener">
                 WhatsApp CS
               </a>
             </li>
@@ -57,7 +67,7 @@ export function Footer() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-5 py-6 border-t border-white/10 flex flex-col md:flex-row justify-between gap-2 text-xs">
-        <span>© 2026 Ludexa Store. All rights reserved.</span>
+        <span>© 2026 {brandName}. All rights reserved.</span>
         <span>Dibuat untuk transaksi yang lebih mudah.</span>
       </div>
     </footer>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CekClient } from "@/components/CekClient";
+import { getCatalog } from "@/lib/db/server";
 
 export const metadata: Metadata = {
   title: "Cek Transaksi",
@@ -8,11 +9,18 @@ export const metadata: Metadata = {
   alternates: { canonical: "/cek" },
   openGraph: {
     title: "Cek Transaksi — Ludexa Store",
-    description: "Lacak status transaksi dengan kode referensi atau nomor tujuan.",
+    description:
+      "Lacak status transaksi dengan kode referensi atau nomor tujuan.",
     url: "/cek",
   },
 };
 
-export default function CekPage() {
-  return <CekClient />;
+export default async function CekPage() {
+  const result = await getCatalog();
+  return (
+    <CekClient
+      services={result.data?.services ?? []}
+      brandSlug={result.data?.brand.slug ?? process.env.BRAND_SLUG ?? ""}
+    />
+  );
 }

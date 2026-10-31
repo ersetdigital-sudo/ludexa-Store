@@ -20,7 +20,7 @@ export function TrackForm() {
         value={q}
         onChange={(e) => setQ(e.target.value)}
         className="w-full h-12 rounded-xl border border-[#f2dde6] bg-white px-4 outline-none focus:border-[#e0337a]"
-        placeholder="REF-LDX12345678 / 0812..."
+        placeholder="LDS-261031-XXXXXX / 0812..."
         aria-label="Kode referensi atau nomor tujuan"
       />
       <button className="w-full h-12 rounded-xl bg-[#1f1630] hover:bg-black text-white font-bold">

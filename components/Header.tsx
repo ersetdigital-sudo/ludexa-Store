@@ -9,9 +9,18 @@ import { WaIcon } from "./WaIcon";
 import { CS_WA } from "@/lib/format";
 import { SEARCH_MAP } from "@/data/nav";
 
-export function Header() {
+export function Header({
+  brandName = "Ludexa Store",
+  logoUrl = null,
+  waCs = null,
+}: {
+  brandName?: string;
+  logoUrl?: string | null;
+  waCs?: string | null;
+}) {
   const router = useRouter();
   const [q, setQ] = useState("");
+  const waNumber = (waCs ?? CS_WA).replace(/\D/g, "");
 
   const onSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +31,7 @@ export function Header() {
 
   return (
     <>
-      <div className="bg-[#e0337a] text-white text-sm font-semibold">
+      <div className="site-promo bg-[#e0337a] text-white text-sm font-semibold">
         <Link
           href="/ewallet"
           className="max-w-6xl mx-auto px-5 h-10 flex items-center justify-center gap-2 relative"
@@ -33,8 +42,8 @@ export function Header() {
       </div>
       <header className="bg-white sticky top-0 z-30 border-b border-[#f4e8ee]">
         <nav className="max-w-6xl mx-auto px-5 h-[72px] flex items-center gap-4 md:gap-8">
-          <Link href="/" aria-label="Ludexa Store" className="shrink-0">
-            <Logo />
+          <Link href="/" aria-label={brandName} className="shrink-0">
+            <Logo name={brandName} logoUrl={logoUrl} />
           </Link>
           <form
             onSubmit={onSearch}
@@ -73,7 +82,7 @@ export function Header() {
               </svg>
             </Link>
             <a
-              href={`https://wa.me/${CS_WA}`}
+              href={`https://wa.me/${waNumber}`}
               target="_blank"
               rel="noopener"
               className="inline-flex items-center gap-2 rounded-full bg-[#25a35a] hover:bg-[#1f8f4e] text-white font-bold text-sm px-4 sm:px-5 h-11"

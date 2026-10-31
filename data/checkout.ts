@@ -1,28 +1,3 @@
-export type Payment = [string, number, "qr" | "ew" | "va"];
-
-export const PAY: Payment[] = [
-  ["QRIS", 0, "qr"],
-  ["DANA", 1000, "ew"],
-  ["OVO", 1000, "ew"],
-  ["GoPay", 1000, "ew"],
-  ["ShopeePay", 1000, "ew"],
-  ["Virtual Account", 2500, "va"],
-];
-
-export type Voucher = {
-  pct?: number;
-  max?: number;
-  flat?: number;
-  min?: number;
-  only?: string[];
-  label: string;
-};
-
-export const VCH: Record<string, Voucher> = {
-  LUDOBARU: { pct: 20, max: 20000, only: ["pulsa", "data", "pln"], label: "Cashback 20% (maks. Rp20.000)" },
-  HEMAT5: { flat: 5000, min: 50000, label: "Potongan Rp5.000 min. Rp50.000" },
-};
-
 export type Operator = { name: string; color: string; prefixes: string[] };
 
 export const OPS: Operator[] = [

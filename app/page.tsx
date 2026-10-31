@@ -4,9 +4,14 @@ import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { TrackForm } from "@/components/TrackForm";
 import { PILLS } from "@/data/nav";
-import { HOME_FAQ, POPULAR } from "@/data/home";
-import { svcUrl } from "@/data/services";
-import { CS_WA } from "@/lib/format";
+import { HOME_FAQ } from "@/data/home";
+import {
+  buildPopular,
+  serviceMeta,
+  svcUrl,
+} from "@/data/services";
+import { getCatalog } from "@/lib/db/server";
+import { CS_WA, rp } from "@/lib/format";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -40,7 +45,19 @@ const faqJsonLd = {
   })),
 };
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const result = await getCatalog();
+  const catalog = result.data;
+  const services = catalog?.services ?? [];
+  const popular = buildPopular(services);
+  const pills: [string, string][] =
+    services.length > 0
+      ? services.map((service) => [service.id, service.n])
+      : PILLS;
+  const waNumber = (catalog?.brand.wa_cs ?? CS_WA).replace(/\D/g, "");
+
   return (
     <main>
       <h1 className="sr-only">Ludexa Store — Semua pembayaran digital, satu tempat</h1>
@@ -110,14 +127,14 @@ export default function HomePage() {
         {/* Pil layanan */}
         <section id="layanan" className="mt-6">
           <div className="flex gap-3 overflow-x-auto pb-2 md:flex-wrap md:justify-between">
-            {PILLS.map(([id, label]) => (
+            {pills.map(([id, label]) => (
               <Link
                 key={id}
                 href={svcUrl(id)}
                 className="shrink-0 inline-flex items-center gap-2.5 rounded-full bg-[#fff0f6] hover:bg-[#ffe3ee] border border-[#f9d4e3] px-4 py-2.5 text-sm font-semibold"
               >
                 <span className="w-5 h-5 text-[#e0337a]">
-                  <Icon name={id} className="w-5 h-5" />
+                  <Icon name={serviceMeta(id).icon} className="w-5 h-5" />
                 </span>
                 {label}
               </Link>
@@ -126,47 +143,52 @@ export default function HomePage() {
         </section>
 
         {/* Produk populer */}
-        <section id="populer" className="mt-10">
-          <div className="flex items-end justify-between">
-            <h2 className="text-2xl md:text-3xl font-extrabold">Lagi Laris</h2>
-            <Link href="/bayar" className="text-sm font-bold text-[#e0337a]">
-              Lihat Semua ›
-            </Link>
-          </div>
-          <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {POPULAR.map((p) => (
-              <div key={p.name} className="card p-4 flex flex-col">
-                <div className="flex items-start gap-3">
-                  <span
-                    className="w-14 h-14 rounded-2xl grid place-items-center text-white font-extrabold text-sm shrink-0"
-                    style={{ background: p.color }}
-                  >
-                    {p.badge}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-extrabold text-lg leading-tight">{p.name}</div>
-                    <div className="text-xs text-[#7a6b78]">{p.desc}</div>
+        {popular.length > 0 && (
+          <section id="populer" className="mt-10">
+            <div className="flex items-end justify-between">
+              <h2 className="text-2xl md:text-3xl font-extrabold">Lagi Laris</h2>
+              <Link href="/bayar" className="text-sm font-bold text-[#e0337a]">
+                Lihat Semua ›
+              </Link>
+            </div>
+            <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {popular.map((p) => (
+                <div key={p.productId} className="card p-4 flex flex-col">
+                  <div className="flex items-start gap-3">
+                    <span
+                      className={`w-14 h-14 rounded-2xl grid place-items-center shrink-0 t-${p.tone}`}
+                    >
+                      <Icon name={p.icon} className="w-7 h-7" />
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-extrabold text-lg leading-tight">
+                        {p.name}
+                      </div>
+                      <div className="text-xs text-[#7a6b78]">{p.service}</div>
+                    </div>
+                    <span className="text-xs font-bold bg-[#ffe3ee] text-[#e0337a] rounded-md px-2 py-0.5">
+                      Populer
+                    </span>
                   </div>
-                  <span className="text-xs font-bold bg-[#ffe3ee] text-[#e0337a] rounded-md px-2 py-0.5">
-                    -5%
-                  </span>
-                </div>
-                <div className="mt-5 flex items-end justify-between gap-2">
-                  <div>
-                    <div className="text-xs text-[#ad9aa7] line-through">{p.old}</div>
-                    <div className="font-extrabold text-lg text-[#e0337a]">{p.now}</div>
+                  <div className="mt-5 flex items-end justify-between gap-2">
+                    <div>
+                      <div className="text-xs text-[#ad9aa7]">Harga</div>
+                      <div className="font-extrabold text-lg text-[#e0337a]">
+                        {rp(p.price)}
+                      </div>
+                    </div>
+                    <Link
+                      href={p.href}
+                      className="rounded-lg bg-[#e0337a] hover:bg-[#c41d65] text-white font-bold text-sm px-5 py-2"
+                    >
+                      Beli
+                    </Link>
                   </div>
-                  <Link
-                    href={p.href}
-                    className="rounded-lg bg-[#e0337a] hover:bg-[#c41d65] text-white font-bold text-sm px-5 py-2"
-                  >
-                    Beli
-                  </Link>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Keunggulan */}
         <section className="mt-8 card p-5 md:p-6 grid sm:grid-cols-3 gap-5 sm:divide-x divide-[#f4e8ee]">
@@ -275,12 +297,12 @@ export default function HomePage() {
             <p className="text-[#5a4b58] mt-1">CS kami siap membantu lewat WhatsApp.</p>
           </div>
           <a
-            href={`https://wa.me/${CS_WA}`}
+            href={`https://wa.me/${waNumber}`}
             target="_blank"
             rel="noopener"
             className="inline-flex items-center gap-2 rounded-full bg-[#25a35a] hover:bg-[#1f8f4e] text-white font-bold px-6 h-12"
           >
-            Chat 0857-1117-2317
+            Chat CS
           </a>
         </div>
       </section>

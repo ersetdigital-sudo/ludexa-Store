@@ -5,8 +5,8 @@ export const PILLS: [string, string][] = [
   ["pln", "Token PLN"],
   ["pdam", "PDAM"],
   ["bpjs", "BPJS Kesehatan"],
-  ["inet", "Internet & TV"],
-  ["wallet", "E-Wallet"],
+  ["internet", "Internet & TV"],
+  ["ewallet", "E-Wallet"],
 ];
 
 // Peta kata kunci pencarian header → rute layanan
